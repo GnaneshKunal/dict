@@ -16,6 +16,10 @@ app.use('/graphql', expressGraphQL({
     graphiql: true
 }));
 
+app.get('/', (req, res) => {
+    return res.send('Hello, World');
+});
+
 server.listen(PORT, (err) => {
     if (err)
         throw err;
