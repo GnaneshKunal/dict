@@ -1,0 +1,25 @@
+{
+  "name": "dict",
+  "version": "1.0.0",
+  "description": "Command Line Dictionary",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GnaneshKunal/dict.git"
+  },
+  "author": "gnanesh",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/GnaneshKunal/dict/issues"
+  },
+  "homepage": "https://github.com/GnaneshKunal/dict#readme",
+  "dependencies": {
+    "axios": "^0.16.2",
+    "express": "^4.15.3",
+    "express-graphql": "^0.6.6",
+    "graphql": "^0.10.1"
+  }
+}
