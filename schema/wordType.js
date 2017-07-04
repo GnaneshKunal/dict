@@ -1,14 +1,15 @@
 const graphql = require('graphql');
-const { GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLList } = graphql;
+const { GraphQLObjectType, GraphQLNonNull, GraphQLString, GraphQLInt, GraphQLList } = graphql;
 const { getWord, getExamples } = require('../src/data/');
 const wordExample = require('./wordExampleType');
+const axios = require('axios');
+
 const WordType = new GraphQLObjectType({
     name: 'Word',
     fields: {
         text: { type: GraphQLString },
         sequence: { type: GraphQLInt },
         score: { type: GraphQLInt },
-        undefined: { type: GraphQLString },
         examples: {
             type: new GraphQLList(wordExample),
             resolve: () => {
@@ -27,6 +28,21 @@ const queryType = new GraphQLObjectType({
         words: {
             type: new GraphQLList(WordType),
             resolve: () => getWord
+        },
+        word: {
+            type: new GraphQLList(WordType),
+            args: {
+                word: {
+                    type: new GraphQLNonNull(GraphQLString),
+                    description: 'The word you want to search',
+                }
+            },
+            resolve: (_, args) => {
+                return axios.get(`http://api.wordnik.com/v4/word.json/${args.word}/definitions?limit=200&includeRelated=true&useCanonical=false&includeTags=false&api_key=${process.env.WORDNIK_API_KEY}`)
+                    .then(res => res.data)
+                    .catch(err => err);
+                
+            }
         },
         examples: {
             type: new GraphQLList(wordExample),
@@ -47,7 +63,3 @@ const queryType = new GraphQLObjectType({
     }
 });
 module.exports = queryType;
-
-/*
-http://api.wordnik.com/v4/word.json/test?useCanonical=false&includeSuggestions=false&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5
-*/
