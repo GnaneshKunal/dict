@@ -1,7 +1,7 @@
 const graphql = require('graphql');
-const { GraphQLObjectType, GraphQLNonNull, GraphQLString, GraphQLInt, GraphQLList } = graphql;
-const { getWord, getExamples } = require('../src/data/');
+const { GraphQLObjectType , GraphQLString, GraphQLInt, GraphQLList } = graphql;
 const wordExample = require('./wordExampleType');
+const wordDefinition = require('./wordDefinitionType');
 const axios = require('axios');
 
 const WordType = new GraphQLObjectType({
@@ -10,56 +10,23 @@ const WordType = new GraphQLObjectType({
         text: { type: GraphQLString },
         sequence: { type: GraphQLInt },
         score: { type: GraphQLInt },
+        definitions: {
+            type: new GraphQLList(wordDefinition),
+            resolve: ({ word }) => {
+                return axios.get(`http://api.wordnik.com:80/v4/word.json/${word}/definitions?limit=200&includeRelated=true&useCanonical=false&includeTags=false&api_key=${process.env.WORDNIK_API_KEY}`)
+                    .then(res => res.data)
+                    .catch(err => err);
+            }
+        },
         examples: {
             type: new GraphQLList(wordExample),
-            resolve: () => {
-                return {
-                    examples: getExamples
-                };
+            resolve: ({ word }) => {
+                return axios.get(`http://api.wordnik.com:80/v4/word.json/${word}/examples?includeDuplicates=false&useCanonical=false&skip=0&limit=5&api_key=${process.env.WORDNIK_API_KEY}`)
+                    .then(res => res.data.examples)
+                    .catch(err => err);
             }
         }
     }
 });
 
-const queryType = new GraphQLObjectType({
-    name: 'QueryType',
-    description: 'The roor Query type',
-    fields: {
-        words: {
-            type: new GraphQLList(WordType),
-            resolve: () => getWord
-        },
-        word: {
-            type: new GraphQLList(WordType),
-            args: {
-                word: {
-                    type: new GraphQLNonNull(GraphQLString),
-                    description: 'The word you want to search',
-                }
-            },
-            resolve: (_, args) => {
-                return axios.get(`http://api.wordnik.com/v4/word.json/${args.word}/definitions?limit=200&includeRelated=true&useCanonical=false&includeTags=false&api_key=${process.env.WORDNIK_API_KEY}`)
-                    .then(res => res.data)
-                    .catch(err => err);
-                
-            }
-        },
-        examples: {
-            type: new GraphQLList(wordExample),
-            resolve: () => getExamples
-        },
-        str: {
-            type: new GraphQLList(GraphQLString),
-            resolve: () => ['sadsda', 'asdsda']
-        },
-        str2: {
-            type: wordExample, // dude check this
-            resolve: () => {
-                return {
-                    examples: ['asdsad', 'saddsadsa'] // nesting is what you were suffering
-                };
-            }
-        }
-    }
-});
-module.exports = queryType;
+module.exports = WordType;
