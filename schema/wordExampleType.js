@@ -1,11 +1,16 @@
 const graphql = require('graphql');
-const { GraphQLObjectType, GraphQLString, GraphQLList } = graphql;
+const { GraphQLObjectType, GraphQLString } = graphql;
 
 const WordExampleType = new GraphQLObjectType({
     name: 'WordExample',
     fields: {
-        examples: {
-            type: new GraphQLList(GraphQLString)
+        text: {
+            type: GraphQLString,
+            description: 'Example'
+        },
+        title: {
+            type: GraphQLString,
+            description: 'Source of example'
         }
     }
 });
