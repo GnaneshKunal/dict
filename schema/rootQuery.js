@@ -30,20 +30,19 @@ const queryType = new GraphQLObjectType({
         },
         examples: {
             type: new GraphQLList(wordExample),
-            resolve: () => getExamples
-        },
-        str: {
-            type: new GraphQLList(GraphQLString),
-            resolve: () => ['sadsda', 'asdsda']
-        },
-        // str2: {
-        //     type: wordExample, // dude check this
-        //     resolve: () => {
-        //         return {
-        //             examples: ['asdsad', 'saddsadsa'] // nesting is what you were suffering
-        //         };
-        //     }
-        // }
+            description: 'Fetch examples for a given word',
+            args: {
+                word: {
+                    type: new GraphQLNonNull(GraphQLString),
+                    description: 'The word you want to search for examples'
+                }
+            },
+            resolve: (_, { word }) => {
+                return axios.get(`http://api.wordnik.com:80/v4/word.json/${word}/examples?includeDuplicates=false&useCanonical=false&skip=0&limit=5&api_key=${process.env.WORDNIK_API_KEY}`)
+                    .then(res => res.data.examples)
+                    .catch(err => err);
+            }
+        }
     }
 });
 module.exports = queryType;
