@@ -5,9 +5,11 @@ const {
 
 
 const word = require('../query/wordQuery.js');
-const relatedWord = require('../query/wordRelatedQuery');
+const relatedWords = require('../query/wordRelatedQuery');
 const definitions = require('../query/wordDefinitionQuery');
 const examples = require('../query/wordExampleQuery');
+const pronunciations = require('../query/wordPronunciationQuery');
+
 const queryType = new GraphQLObjectType({
     name: 'QueryType',
     description: 'The roor Query type',
@@ -15,7 +17,8 @@ const queryType = new GraphQLObjectType({
         word,
         examples,
         definitions,
-        relatedWord
+        relatedWords,
+        pronunciations
     }
 });
 module.exports = queryType;
