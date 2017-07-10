@@ -12,7 +12,7 @@ const pronunciations = require('../query/wordPronunciationQuery');
 
 const queryType = new GraphQLObjectType({
     name: 'QueryType',
-    description: 'The roor Query type',
+    description: 'The root Query type',
     fields: {
         word,
         examples,
