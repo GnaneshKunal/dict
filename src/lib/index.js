@@ -1,0 +1,1 @@
+exports.wordrelationshipTypes = ['synonym', 'antonym', 'variant', 'equivalent', 'cross-reference', 'related-word', 'rhyme', 'form', 'etymologically-related-term', 'hypernym', 'hyponym', 'inflected-form', 'primary', 'same-context', 'verb-form', 'verb-stem'];
