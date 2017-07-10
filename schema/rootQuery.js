@@ -6,11 +6,11 @@ const {
     GraphQLList
 } = graphql;
 const wordExample = require('../types/wordExampleType');
-const wordDefinition = require('../types/wordDefinitionType');
 const axios = require('axios');
 const WordType = require('../types/wordType');
 
-const relatedWordQuery = require('../querys/relatedWordQuery');
+const relatedWord = require('../query/wordRelatedQuery');
+const definitions = require('../query/wordDefinitionQuery');
 
 const queryType = new GraphQLObjectType({
     name: 'QueryType',
@@ -45,22 +45,8 @@ const queryType = new GraphQLObjectType({
                     .catch(err => err);
             }
         },
-        definitions: {
-            type: new GraphQLList(wordDefinition),
-            description: 'Fetch definitions for a given word',
-            args: {
-                word: {
-                    type: new GraphQLList(GraphQLString),
-                    description: 'The word you want to search for definitions'
-                }
-            },
-            resolve: (_, { word }) => {
-                return axios.get(`http://api.wordnik.com:80/v4/word.json/${word}/definitions?limit=200&includeRelated=true&useCanonical=false&includeTags=false&api_key=${process.env.WORDNIK_API_KEY}`)
-                    .then(res => res.data)
-                    .catch(err => err);
-            }
-        },
-        relatedWord: relatedWordQuery
+        definitions,
+        relatedWord
     }
 });
 module.exports = queryType;
