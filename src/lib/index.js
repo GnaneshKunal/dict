@@ -1,1 +1,3 @@
 exports.wordrelationshipTypes = ['synonym', 'antonym', 'variant', 'equivalent', 'cross-reference', 'related-word', 'rhyme', 'form', 'etymologically-related-term', 'hypernym', 'hyponym', 'inflected-form', 'primary', 'same-context', 'verb-form', 'verb-stem'];
+exports.sourceDictionary = ['ahd', 'century', 'cmu', 'macmillan', 'wiktionary', 'webster', 'wordnet'];
+exports.typeFormat= ['ahd', 'arpabet', 'gcide-diacritical', 'IPA'];
