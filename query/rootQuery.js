@@ -4,11 +4,12 @@ const {
 } = graphql;
 
 
-const word = require('../query/wordQuery.js');
-const relatedWords = require('../query/wordRelatedQuery');
-const definitions = require('../query/wordDefinitionQuery');
-const examples = require('../query/wordExampleQuery');
-const pronunciations = require('../query/wordPronunciationQuery');
+const word = require('./wordQuery.js');
+const relatedWords = require('./wordRelatedQuery');
+const definitions = require('./wordDefinitionQuery');
+const examples = require('./wordExampleQuery');
+const pronunciations = require('./wordPronunciationQuery');
+const hyphenations = require('./wordHyphenationQuery');
 
 const queryType = new GraphQLObjectType({
     name: 'QueryType',
@@ -18,7 +19,8 @@ const queryType = new GraphQLObjectType({
         examples,
         definitions,
         relatedWords,
-        pronunciations
+        pronunciations,
+        hyphenations
     }
 });
 module.exports = queryType;
