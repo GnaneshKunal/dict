@@ -45,15 +45,7 @@ module.exports = {
         sourceDictionary = includes(sourceDictionaryLib, sourceDictionary) ? sourceDictionary : '';
         typeFormat = includes(typeFormatLib, typeFormat) ? typeFormat : '';
         return axios.get(`http://api.wordnik.com:80/v4/word.json/${word}/pronunciations?useCanonical=${useCanonical}&sourceDictionary=${sourceDictionary}&typeFormat=${typeFormat}&limit=${limit}&api_key=${process.env.WORDNIK_API_KEY}`)
-            .then(res => {
-                return res.data.map(e => {
-                    return mapKeys(e, (val, key) => {
-                        if (key === 'raw')
-                            return 'pronunciation';
-                        return key;
-                    });
-                });
-            })
+            .then(res => res.data.map(e => mapKeys(e, (val, key) => key === 'raw' ? 'pronunciation': key)))
             .catch(err => err);
     }
 };
