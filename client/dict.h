@@ -1,1 +1,1 @@
-void test(char *);
+char *parser(char *, char *, char *, int, ...);
