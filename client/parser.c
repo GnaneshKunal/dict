@@ -10,7 +10,6 @@
     strcat((str), "(word: \"");
 
 char *parser(char *str, char *method, char *word, int options_length, ...) {
-    int i;
     // if (strcmp(method, "mean") != 0) {
     //     puts("options");
     //     return 0;
@@ -27,13 +26,13 @@ char *parser(char *str, char *method, char *word, int options_length, ...) {
     // strcat(str, " definitions(word: \"");
     strcat(str, word);
     strcat(str, "\") {");
-    //     strcat(str, "text \
+    /*     strcat(str, "text \
 // sequence \
 // partOfSpeech");
     // for (i = 0; i < options_length; i++) {
     //     strcat(str, options[i]);
     //     strcat(str, " ");
-    // }
+    // } */
     va_list options;
     va_start(options, options_length);
     for (int x = 0; x < options_length; x++) {
