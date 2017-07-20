@@ -1,7 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-
 #include "dict.h"
 #include <curl/curl.h>
 #include <json-c/json.h>
@@ -106,9 +102,16 @@ int main(int argc, char **argv) {
      * The following create an object and add the question and answer to it.
      */
     jobj = json_object_new_object();
-    json_object_object_add(jobj, "question", json_object_new_string(question));
-    json_object_object_add(jobj, "answer", json_object_new_string(answer));
-
+    // json_object_object_add(jobj, "question", json_object_new_string(question));
+    // json_object_object_add(jobj, "answer", json_object_new_string(answer));
+    char buf[1048];
+    int fd, n;
+    fd = open("body.json", O_RDONLY);
+    if ((n = read(fd, buf, 1048)) < 0) {
+        puts("something went wrong");
+        exit(1);
+    }
+    json_object_object_add(jobj, "graphQL", json_object_new_string(buf));
     for (i = 0; json_flags[i].flag_str != NULL; i++) {
         printf("\nFlag %s:\n---\n", json_flags[i].flag_str);
         printf("%s\n---\n", json_object_to_json_string_ext(jobj, json_flags[i].flag));
