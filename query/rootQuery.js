@@ -11,6 +11,7 @@ const examples = require('./wordExampleQuery');
 const pronunciations = require('./wordPronunciationQuery');
 const hyphenations = require('./wordHyphenationQuery');
 const phrases = require('./wordPhraseQuery');
+const wordOfTheDay = require('./wordWordOfTheDayQuery');
 
 const queryType = new GraphQLObjectType({
     name: 'QueryType',
@@ -22,7 +23,8 @@ const queryType = new GraphQLObjectType({
         relatedWords,
         pronunciations,
         hyphenations,
-        phrases
+        phrases,
+        wordOfTheDay
     }
 });
 module.exports = queryType;
