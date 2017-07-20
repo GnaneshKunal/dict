@@ -1,4 +1,4 @@
-const { GraphQLBoolean, GraphQLString, GraphQLList, GraphQLInt } = require('graphql');
+const { GraphQLBoolean, GraphQLString, GraphQLList, GraphQLInt, GraphQLNonNull } = require('graphql');
 const lodash = require('lodash');
 const axios = require('axios');
 const wordRelated = require('../types/wordRelatedType');
@@ -9,7 +9,7 @@ module.exports = {
     description: 'Fetch related words for a given word',
     args: {
         word: {
-            type: new GraphQLList(GraphQLString),
+            type: new GraphQLNonNull(GraphQLString),
             description: 'The word you want to search for related words'
         },
         useCanonical: {
