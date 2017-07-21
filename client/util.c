@@ -2,7 +2,19 @@
 
 const char argv_valid[][6] = {"-d", "-e", "-h", "-p", "-o", "-r"};
 
-extern int argc;
+ar_options limit = {"-l", "limit"};
+ar_options partOfSpeech = {"-pos", "partOfSpeech"};
+ar_options includeRelated = {"-ir", "includeRelated"};
+ar_options sourceDictionaries = {"-sds", "sourceDictionaries"};
+ar_options useCanonical = {"-uc", "useCanonical"};
+ar_options includeTags = {"-it", "includeTags"};
+ar_options includeDuplicate = {"-id", "includeDuplicates"};
+ar_options skip = {"-s", "skip"};
+ar_options sourceDictionary = {"-sd", "sourceDictionary"};
+ar_options wlmi = {"wl", "wlmi"};
+ar_options typeFormat = {"-tf", "typeFormat"};
+ar_options relationshipTypes = {"-rt", "relationshipTypes"};
+ar_options limitPerRelationshipType = {"-lrt", "limitPerRelationshipType"};
 
 void print_usage(void) {
     printf("Usage: dict [options] word [other options]...\n");
