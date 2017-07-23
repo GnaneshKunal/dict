@@ -1,20 +1,6 @@
 #include "dict.h"
 
-const char argv_valid[][6] = {"-d", "-e", "-h", "-p", "-o", "-r"};
-
-ar_options limit = {"-l", "limit"};
-ar_options partOfSpeech = {"-pos", "partOfSpeech"};
-ar_options includeRelated = {"-ir", "includeRelated"};
-ar_options sourceDictionaries = {"-sds", "sourceDictionaries"};
-ar_options useCanonical = {"-uc", "useCanonical"};
-ar_options includeTags = {"-it", "includeTags"};
-ar_options includeDuplicate = {"-id", "includeDuplicates"};
-ar_options skip = {"-s", "skip"};
-ar_options sourceDictionary = {"-sd", "sourceDictionary"};
-ar_options wlmi = {"wl", "wlmi"};
-ar_options typeFormat = {"-tf", "typeFormat"};
-ar_options relationshipTypes = {"-rt", "relationshipTypes"};
-ar_options limitPerRelationshipType = {"-lrt", "limitPerRelationshipType"};
+const char argv_valid[][7] = {"-d", "-e", "-h", "-p", "-o", "-r", "-x"};
 
 void print_usage(void) {
     printf("Usage: dict [options] word [other options]...\n");
@@ -25,12 +11,13 @@ void print_usage(void) {
     printf("\t-p\t: Get word Phrases\n");
     printf("\t-o\t: Get word Pronunciation\n");
     printf("\t-r\t: Get word Relations\n");
+    printf("\t-x\t: Get word of the day\n");
 }
 
 bool argv_exists(char *str) {
     bool exists = false;
     int i;
-    for (i = 0; i < 6; i++)
+    for (i = 0; i < 7; i++)
         if (strcmp(str, argv_valid[i]) == 0) {
             exists = true;
             break;
