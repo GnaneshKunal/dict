@@ -1,110 +1,141 @@
-#include <fcntl.h>
+#include "dict.h"
 #include <json-c/json.h>
-#include <stdio.h>
-#include <string.h>
-#include <sys/mman.h>
-#include <sys/stat.h>
-#include <unistd.h>
-char gk2[] = "{\"data\":{\"definitions\":[{\"text\":\"To have or take on the appearance, form, or "
-             "sound of; "
-             "imitate.\",\"partOfSpeech\":\"verb-transitive\",\"sequence\":0},{\"text\":\"To make "
-             "in imitation of or as a substitute for. See Synonyms at "
-             "imitate.\",\"partOfSpeech\":\"verb-transitive\",\"sequence\":1},{\"text\":\"To make "
-             "a pretense of; feign:  simulate interest. "
-             "\",\"partOfSpeech\":\"verb-transitive\",\"sequence\":2},{\"text\":\"To create a "
-             "representation or model of (a physical system or particular situation, for "
-             "example).\",\"partOfSpeech\":\"verb-transitive\",\"sequence\":3}]}}";
-// char *rem(char *str, char *newstr, char c) {
-//     char *f = strchr(str, c) + 1;
-//     f = (*f) == ' ' ? f+1 : f;
-//     char *l = strrchr(str, c) - 1;
-//     puts(l);
-//     l = (*l) == ' ' ? l-1 : l;
-//     strncpy(newstr, f, strlen(gk) - strlen(l) + 1);
-//     return newstr;
-// }
 
+char jsonstr[] = "{  \"data\": {    \"definitions\": [      {        \"text\": \"To laugh with "
+                 "repeated short, spasmodic sounds.\",        \"partOfSpeech\": "
+                 "\"verb-intransitive\"      },      {        \"text\": \"To utter while "
+                 "giggling.\",        \"partOfSpeech\": \"verb-transitive\"      },      {        "
+                 "\"text\": \"A short, spasmodic laugh.\",        \"partOfSpeech\": \"noun\"      "
+                 "}    ]  }}";
 
-char *rem2(char *str, char *newstr, char c1, char c2) {
-    char *f = strchr(str, c1) + 1;
-    char *l = strrchr(str, c2) - 1;
-    strncpy(newstr, f, strlen(f) - strlen(l) + 1);
-    newstr[strlen(f) - strlen(l) + 1] = '\0';
-    return newstr;
-}
+char json2[] =
+"{  \"data\": {    \"examples\": [      {        \"text\": \"MC: * giggle, giggle* Sooooo tall me, "
+"are you going to have any of your clothes, like, inspired by India?\",        \"title\": \"The "
+"Compulsive Confessor\"      },      {        \"text\": \"* I always knew "
+"I was her favorite ... giggle giggle giggle*\",        \"title\": \"Knowledge is "
+"Power\"      },      {        \"text\": \"We both started to giggle and I can tell you "
+"my daughter will not be toilet papering the neighbors. (now my nose was running. * "
+"giggle*)\",        \"title\": \"Spiritually Unequal Marriage\"      },      {        "
+"\"text\": \"I guess seeing that smile or hearing a giggle is what keeps us going.\",    "
+"    \"title\": \"Hello, Goodbye | Her Bad Mother\"      },      {        \"text\": \"A "
+"good giggle is a great way to start the day off.\",        \"title\": \"FRANKENSTEIN'S "
+"MONSTERS • by John Wiswell\"      }]}}";
 
-// char *remp(char *str, char *newstr) {
-//     char *f = strchr(str, '"') + 1;
-//     char *f1 = strchr(f, '"') + 2;
-//     char *l = strrchr(str, '"') - 1;
-//     char *l1 = strrchr(f, '"') - 2;
-//     rem(str, newstr);
-// }
-char name[] = "g{anesnabc}h";
-int main(void) {
-    char gk[1048];
-    int fd, n;
-    fd = open("body.json", O_RDONLY);
-    if ((n = read(fd, gk, 1048)) < 0) {
-        puts("something went wrong");
-        exit(1);
-    }
-    char *json = mmap(gk, n, PROT_READ, MAP_PRIVATE, fd, 0);
-    close(fd);
+char json_relate[] =
+"{  \"data\": {    \"relatedWords\": [      {        \"relationshipType\": \"verb-form\",        "
+"\"words\": [          \"giggled\",          \"giggles\",          \"giggling\"        ]      },   "
+"   {        \"relationshipType\": \"hypernym\",        \"words\": [          \"laugh\",          "
+"\"express mirth\",          \"express joy\",          \"laughter\"        ]      },      {        "
+"\"relationshipType\": \"form\",        \"words\": [          \"giggled\",          \"giggling\",  "
+"        \"giggly\"        ]      },      {        \"relationshipType\": \"synonym\",        "
+"\"words\": [          \"laugh\"        ]      },      {        \"relationshipType\": \"rhyme\",   "
+"     \"words\": [          \"jiggle\",          \"riggle\",          \"squiggle\",          "
+"\"wiggle\",          \"wriggle\"        ]      },      {        \"relationshipType\": "
+"\"same-context\",        \"words\": [          \"chuckle\",          \"gasp\",          "
+"\"squeal\",          \"titter\",          \"cackle\",          \"sob\",          \"guffaw\",      "
+"    \"smirk\",          \"snort\",          \"whimper\"        ]      }    ]  }}";
+int parse_word(char *data, char *word) {
     struct json_object *obj;
-    obj = json_tokener_parse(json);
-    // struct json_object *json;
-    // char test2[1024] = "";
-    // // strncat(test2, f, strlen(gk) - strlen(l));
-    char name2[2048] = "";
-    // // rem(gk, test2, '{');
-    // char *f = strchr(gk, '{') + 1;
-    // char *l = strrchr(gk, '}') - 1;
-    // strncpy(name2, f, strlen(f) - strlen(l) + 1);
-    // puts(gk);
-    // putchar('\n');
+    obj = json_tokener_parse(data);
+    char out[4096];
+    strcpy(out, ANSI_COLOR_GREEN "Word: " ANSI_COLOR_RESET);
+    strcat(out, word);
+    strcat(out, "\n");
     json_object_object_foreach(obj, key, val) {
-        // printf("key = %s value = %s\n", key, json_object_get_string(val));
-        json_object_object_foreach(val, key, val2) {
-            // printf("key = %s value = %s\n", key, json_object_get_string(val2));
+        struct json_object *data = val;
+        json_object_object_foreach(val, def, val2) {
             struct json_object *arr;
             int i, len = json_object_array_length(val2);
             for (i = 0; i < len; i++) {
-                arr = json_object_array_get_idx(val2, i); // check out this
-                printf("%s\n", json_object_get_string(arr));
+                arr = json_object_array_get_idx(val2, i);
+                json_object_object_foreach(arr, def2, val3) {
+                    // printf("key = %s value = %s\n", def2, json_object_get_string(val3));
+                    if (strcmp(def2, "text") == 0) {
+                        strcat(out, ANSI_COLOR_YELLOW "def: " ANSI_COLOR_RESET);
+                        strcat(out, json_object_get_string(val3));
+                        strcat(out, "\t");
+                    } else if (strcmp(def2, "partOfSpeech") == 0) {
+                        strcat(out, ANSI_COLOR_BLUE "partOfSpeech: " ANSI_COLOR_RESET);
+                        strcat(out, json_object_get_string(val3));
+                        if (i != len - 1)
+                            strcat(out, "\n");
+                    }
+                }
             }
-            // json_object_object_foreach(val, key2, val22) {
-            //     printf("key = %s value = %s\n", key, json_object_get_string(val22));
-            // }
-            // json_object_object_foreach(val2, key, val3) {
-            //     printf("key = %s value = %s\n", key, json_object_get_string(val3));
-            // }
-            // size_t si = json_object_array_length(val2);
-            // printf("%lu\n", si);
-            struct json_object *gj = json_object_array_get_idx(val2, 4);
-            // json_object_array
         }
     }
-    rem2(gk, name2, '{', '}');
-    // puts(name2);
-    // putchar('\n');
-    rem2(name2, name2, '{', '}');
-    // puts(name2);
-    // putchar('\n');
-    rem2(name2, name2, '[', ']');
-    // puts(name2);
-    // puts(test2);
-    // putchar('\n');
-    // rem(gk, test2, '{');
-    // puts(test2);
-    // char buf[1048];
-    // int i, fd, n;
-    // fd = open("body.json", O_RDONLY);
-    // if ((n = read(fd, buf, 1048)) < 0) {
-    //     puts("something went wrong");
-    //     exit(1);
-    // }
-    // json = json_object_new_object();
-    // json_object_object_add(json, )
+    puts(out);
+    // printf(ANSI_COLOR_YELLOW "%s" ANSI_COLOR_RESET "\n", defs);
+    // printf(ANSI_COLOR_RED "%s" ANSI_COLOR_RESET "\n", defs);
+    // printf(ANSI_COLOR_MAGENTA "%s" ANSI_COLOR_RESET "\n", defs);
+    // printf(ANSI_COLOR_GREEN "%s" ANSI_COLOR_RESET "\n", defs);
+    // printf(ANSI_COLOR_CYAN "%s" ANSI_COLOR_RESET "\n", defs);
+    return 0;
+}
+
+int parse_examples(char *data, char *word) {
+    struct json_object *obj;
+    obj = json_tokener_parse(data);
+    char out[4096];
+    strcpy(out, ANSI_COLOR_GREEN "Examples: " ANSI_COLOR_RESET);
+    strcat(out, word);
+    strcat(out, "\n");
+    json_object_object_foreach(obj, key, val) {
+        struct json_object *data = val;
+        json_object_object_foreach(val, def, val2) {
+            struct json_object *arr;
+            int i, len = json_object_array_length(val2);
+            for (i = 0; i < len; i++) {
+                arr = json_object_array_get_idx(val2, i);
+                json_object_object_foreach(arr, def2, val3) {
+                    if (strcmp(def2, "text") == 0) {
+                        strcat(out, ANSI_COLOR_YELLOW "example: " ANSI_COLOR_RESET);
+                        strcat(out, json_object_get_string(val3));
+                        strcat(out, "\n");
+                    } else if (strcmp(def2, "title") == 0) {
+                        strcat(out, ANSI_COLOR_BLUE "title: " ANSI_COLOR_RESET);
+                        strcat(out, json_object_get_string(val3));
+                        if (i != len - 1)
+                            strcat(out, "\n");
+                    }
+                }
+            }
+        }
+    }
+    puts(out);
+    return 0;
+}
+
+int main(int argc, char **argv) {
+    struct json_object *obj;
+    obj = json_tokener_parse(json_relate);
+    char out[4096];
+    strcpy(out, ANSI_COLOR_GREEN "Related Words: " ANSI_COLOR_RESET);
+    strcat(out, argv[1]);
+    strcat(out, "\n");
+    json_object_object_foreach(obj, key, val) {
+        struct json_object *data = val;
+        json_object_object_foreach(val, def, val2) {
+            struct json_object *arr;
+            int i, len = json_object_array_length(val2);
+            for (i = 0; i < len; i++) {
+                arr = json_object_array_get_idx(val2, i);
+                json_object_object_foreach(arr, def2, val3) {
+                    printf("key = %s value = %s\n", def2, json_object_get_string(val3));
+                    if (strcmp(def2, "relationshipType") == 0) {
+                        strcat(out, ANSI_COLOR_YELLOW "example: " ANSI_COLOR_RESET);
+                        strcat(out, json_object_get_string(val3));
+                        strcat(out, "\n");
+                    } else if (strcmp(def2, "title") == 0) {
+                        strcat(out, ANSI_COLOR_BLUE "title: " ANSI_COLOR_RESET);
+                        strcat(out, json_object_get_string(val3));
+                        if (i != len - 1)
+                            strcat(out, "\n");
+                    }
+                }
+            }
+        }
+    }
+    puts(out);
     return 0;
 }
