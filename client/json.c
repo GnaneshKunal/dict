@@ -210,3 +210,28 @@ void parse_phrases(char *data, char *word) {
     }
     puts(out);
 }
+
+void parse_wotd(char *data, char *word) {
+    struct json_object *obj;
+    obj = json_tokener_parse(data);
+    char out[4096];
+    strcpy(out, ANSI_COLOR_GREEN "Word: " ANSI_COLOR_RESET);
+    strcat(out, word);
+    strcat(out, "\n");
+    json_object_object_foreach(obj, key, val) {
+        struct json_object *data = val;
+        json_object_object_foreach(val, def, val2) {
+            json_object_object_foreach(val2, def2, val3) {
+                if (strcmp(def2, "word") == 0) {
+                    strcat(out, ANSI_COLOR_YELLOW "Word of the day: " ANSI_COLOR_RESET);
+                    strcat(out, json_object_get_string(val3));
+                    strcat(out, "\n");
+                } else if (strcmp(def2, "publishDate") == 0) {
+                    strcat(out, ANSI_COLOR_BLUE "Date: " ANSI_COLOR_RESET);
+                    strcat(out, json_object_get_string(val3));
+                }
+            }
+        }
+    }
+    puts(out);
+}
