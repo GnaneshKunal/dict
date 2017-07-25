@@ -232,8 +232,7 @@ void make_relations(char **argv, char *query) {
 
 void make_wod(char *query) {
     strcat(query, "wordOfTheDay ");
-    strcat(query,
-           "query { wordOfTheDay { definitions { partOfSpeech  text } examples { text }  }} ");
+    strcat(query, "query {  wordOfTheDay { word publishDate }}");
 }
 
 void make_process(char **argv, char *query) {
