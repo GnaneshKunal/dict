@@ -1,40 +1,25 @@
 #include "dict.h"
 #include <json-c/json.h>
 
-char jsonstr[] = "{  \"data\": {    \"definitions\": [      {        \"text\": \"To laugh with "
-                 "repeated short, spasmodic sounds.\",        \"partOfSpeech\": "
-                 "\"verb-intransitive\"      },      {        \"text\": \"To utter while "
-                 "giggling.\",        \"partOfSpeech\": \"verb-transitive\"      },      {        "
-                 "\"text\": \"A short, spasmodic laugh.\",        \"partOfSpeech\": \"noun\"      "
-                 "}    ]  }}";
+char *rem_array(char *word) {
+    char o = '"';
+    char *k, *m, *n;
+    k = strchr(word, o);
 
-char json2[] =
-"{  \"data\": {    \"examples\": [      {        \"text\": \"MC: * giggle, giggle* Sooooo tall me, "
-"are you going to have any of your clothes, like, inspired by India?\",        \"title\": \"The "
-"Compulsive Confessor\"      },      {        \"text\": \"* I always knew "
-"I was her favorite ... giggle giggle giggle*\",        \"title\": \"Knowledge is "
-"Power\"      },      {        \"text\": \"We both started to giggle and I can tell you "
-"my daughter will not be toilet papering the neighbors. (now my nose was running. * "
-"giggle*)\",        \"title\": \"Spiritually Unequal Marriage\"      },      {        "
-"\"text\": \"I guess seeing that smile or hearing a giggle is what keeps us going.\",    "
-"    \"title\": \"Hello, Goodbye | Her Bad Mother\"      },      {        \"text\": \"A "
-"good giggle is a great way to start the day off.\",        \"title\": \"FRANKENSTEIN'S "
-"MONSTERS • by John Wiswell\"      }]}}";
+    while (k != NULL) {
+        *k = '\a';
+        k = strchr(k, o);
+    }
+    m = strchr(word, '[') + 1;
+    n = strrchr(word, ']') - 1;
+    strncpy(word, m, strlen(m) - strlen(n));
+    word[strlen(m) - strlen(n) + 1] = '\0';
+    strcpy(word, word);
 
-char json_relate[] =
-"{  \"data\": {    \"relatedWords\": [      {        \"relationshipType\": \"verb-form\",        "
-"\"words\": [          \"giggled\",          \"giggles\",          \"giggling\"        ]      },   "
-"   {        \"relationshipType\": \"hypernym\",        \"words\": [          \"laugh\",          "
-"\"express mirth\",          \"express joy\",          \"laughter\"        ]      },      {        "
-"\"relationshipType\": \"form\",        \"words\": [          \"giggled\",          \"giggling\",  "
-"        \"giggly\"        ]      },      {        \"relationshipType\": \"synonym\",        "
-"\"words\": [          \"laugh\"        ]      },      {        \"relationshipType\": \"rhyme\",   "
-"     \"words\": [          \"jiggle\",          \"riggle\",          \"squiggle\",          "
-"\"wiggle\",          \"wriggle\"        ]      },      {        \"relationshipType\": "
-"\"same-context\",        \"words\": [          \"chuckle\",          \"gasp\",          "
-"\"squeal\",          \"titter\",          \"cackle\",          \"sob\",          \"guffaw\",      "
-"    \"smirk\",          \"snort\",          \"whimper\"        ]      }    ]  }}";
-int parse_word(char *data, char *word) {
+    return word;
+}
+
+void parse_word(char *data, char *word) {
     struct json_object *obj;
     obj = json_tokener_parse(data);
     char out[4096];
@@ -49,7 +34,6 @@ int parse_word(char *data, char *word) {
             for (i = 0; i < len; i++) {
                 arr = json_object_array_get_idx(val2, i);
                 json_object_object_foreach(arr, def2, val3) {
-                    // printf("key = %s value = %s\n", def2, json_object_get_string(val3));
                     if (strcmp(def2, "text") == 0) {
                         strcat(out, ANSI_COLOR_YELLOW "def: " ANSI_COLOR_RESET);
                         strcat(out, json_object_get_string(val3));
@@ -65,12 +49,6 @@ int parse_word(char *data, char *word) {
         }
     }
     puts(out);
-    // printf(ANSI_COLOR_YELLOW "%s" ANSI_COLOR_RESET "\n", defs);
-    // printf(ANSI_COLOR_RED "%s" ANSI_COLOR_RESET "\n", defs);
-    // printf(ANSI_COLOR_MAGENTA "%s" ANSI_COLOR_RESET "\n", defs);
-    // printf(ANSI_COLOR_GREEN "%s" ANSI_COLOR_RESET "\n", defs);
-    // printf(ANSI_COLOR_CYAN "%s" ANSI_COLOR_RESET "\n", defs);
-    return 0;
 }
 
 int parse_examples(char *data, char *word) {
@@ -106,12 +84,13 @@ int parse_examples(char *data, char *word) {
     return 0;
 }
 
-int main(int argc, char **argv) {
+void parse_related(char *data, char *word) {
+
     struct json_object *obj;
-    obj = json_tokener_parse(json_relate);
+    obj = json_tokener_parse(data);
     char out[4096];
     strcpy(out, ANSI_COLOR_GREEN "Related Words: " ANSI_COLOR_RESET);
-    strcat(out, argv[1]);
+    strcat(out, word);
     strcat(out, "\n");
     json_object_object_foreach(obj, key, val) {
         struct json_object *data = val;
@@ -121,13 +100,47 @@ int main(int argc, char **argv) {
             for (i = 0; i < len; i++) {
                 arr = json_object_array_get_idx(val2, i);
                 json_object_object_foreach(arr, def2, val3) {
-                    printf("key = %s value = %s\n", def2, json_object_get_string(val3));
                     if (strcmp(def2, "relationshipType") == 0) {
-                        strcat(out, ANSI_COLOR_YELLOW "example: " ANSI_COLOR_RESET);
+                        strcat(out, ANSI_COLOR_YELLOW "relationship: " ANSI_COLOR_RESET);
                         strcat(out, json_object_get_string(val3));
                         strcat(out, "\n");
-                    } else if (strcmp(def2, "title") == 0) {
-                        strcat(out, ANSI_COLOR_BLUE "title: " ANSI_COLOR_RESET);
+                    } else if (strcmp(def2, "words") == 0) {
+                        strcat(out, ANSI_COLOR_BLUE "words: " ANSI_COLOR_RESET);
+                        char words[100];
+                        strcpy(words, json_object_get_string(val3));
+                        rem_array(words);
+                        strcat(out, words);
+                        if (i != len - 1)
+                            strcat(out, "\n");
+                    }
+                }
+            }
+        }
+    }
+    puts(out);
+}
+
+void parse_pronunciation(char *data, char *word) {
+    struct json_object *obj;
+    obj = json_tokener_parse(data);
+    char out[4096];
+    strcpy(out, ANSI_COLOR_GREEN "Pronunciation: " ANSI_COLOR_RESET);
+    strcat(out, word);
+    strcat(out, "\n");
+    json_object_object_foreach(obj, key, val) {
+        struct json_object *data = val;
+        json_object_object_foreach(val, def, val2) {
+            struct json_object *arr;
+            int i, len = json_object_array_length(val2);
+            for (i = 0; i < len; i++) {
+                arr = json_object_array_get_idx(val2, i);
+                json_object_object_foreach(arr, def2, val3) {
+                    if (strcmp(def2, "rawType") == 0) {
+                        strcat(out, ANSI_COLOR_YELLOW "Type: " ANSI_COLOR_RESET);
+                        strcat(out, json_object_get_string(val3));
+                        strcat(out, "\n");
+                    } else if (strcmp(def2, "pronunciation") == 0) {
+                        strcat(out, ANSI_COLOR_BLUE "pronunciation: " ANSI_COLOR_RESET);
                         strcat(out, json_object_get_string(val3));
                         if (i != len - 1)
                             strcat(out, "\n");
@@ -137,5 +150,63 @@ int main(int argc, char **argv) {
         }
     }
     puts(out);
-    return 0;
+}
+
+void parse_hyphenation(char *data, char *word) {
+    struct json_object *obj;
+    obj = json_tokener_parse(data);
+    char out[4096];
+    strcpy(out, ANSI_COLOR_GREEN "Word: " ANSI_COLOR_RESET);
+    strcat(out, word);
+    strcat(out, "\n");
+    json_object_object_foreach(obj, key, val) {
+        struct json_object *data = val;
+        json_object_object_foreach(val, def, val2) {
+            struct json_object *arr;
+            int i, len = json_object_array_length(val2);
+            strcat(out, ANSI_COLOR_YELLOW "Hyphenation: " ANSI_COLOR_RESET);
+            for (i = 0; i < len; i++) {
+                arr = json_object_array_get_idx(val2, i);
+                json_object_object_foreach(arr, def2, val3) {
+                    if (strcmp(def2, "text") == 0) {
+                        strcat(out, json_object_get_string(val3));
+                        if ((len - i) != len - 1)
+                            strcat(out, "-");
+                    }
+                }
+            }
+        }
+    }
+    puts(out);
+}
+
+void parse_phrases(char *data, char *word) {
+    struct json_object *obj;
+    obj = json_tokener_parse(data);
+    char out[4096];
+    strcpy(out, ANSI_COLOR_GREEN "Word: " ANSI_COLOR_RESET);
+    strcat(out, word);
+    strcat(out, "\n");
+    json_object_object_foreach(obj, key, val) {
+        struct json_object *data = val;
+        json_object_object_foreach(val, def, val2) {
+            struct json_object *arr;
+            int i, len = json_object_array_length(val2);
+            for (i = 0; i < len; i++) {
+                arr = json_object_array_get_idx(val2, i);
+                json_object_object_foreach(arr, def2, val3) {
+                    if (strcmp(def2, "gram1") == 0) {
+                        sprintf(out + strlen(out), ANSI_COLOR_YELLOW "Phrase %d: " ANSI_COLOR_RESET, i + 1);
+                        strcat(out, json_object_get_string(val3));
+                        strcat(out, " ");
+                    } else if (strcmp(def2, "gram2") == 0) {
+                        strcat(out, json_object_get_string(val3));
+                        if (i != len - 1)
+                            strcat(out, "\n");
+                    }
+                }
+            }
+        }
+    }
+    puts(out);
 }
