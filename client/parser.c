@@ -119,7 +119,7 @@ void make_hyphenations(char **argv, char *query) {
     strcat(query, "{ text type seq } ");
 }
 
-void make_pronunication(char **argv, char *query) {
+void make_pronunciation(char **argv, char *query) {
     if (argv[0] == NULL) {
         print_usage();
         exit(0);
@@ -258,7 +258,7 @@ void make_process(char **argv, char *query) {
             puts(response);
             break;
         case 'o':
-            make_pronunication(argv + 2, query);
+            make_pronunciation(argv + 2, query);
             strcat(query, "}");
             request(query, response);
             puts(response);
