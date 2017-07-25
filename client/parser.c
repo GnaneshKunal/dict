@@ -13,12 +13,12 @@ void make_word(char **argv, char *query) {
     int i = 1;
     while (argv[i] != NULL) {
         if (strstr(argv[i], "-l") != NULL) {
-            char * r;
+            char *r;
             strcat(args, ", limit:");
             r = strchr(argv[i], '=') + 1;
             strcat(args, r);
         } else if (strstr(argv[i], "-pos") != NULL) {
-            char * r;
+            char *r;
             strcat(args, ", partOfSpeech:\"");
             r = strchr(argv[i], '=') + 1;
             strcat(args, r);
@@ -59,7 +59,7 @@ void make_examples(char **argv, char *query) {
     int i = 1;
     while (argv[i] != NULL) {
         if (strstr(argv[i], "-l") != NULL) {
-            char * r;
+            char *r;
             strcat(args, ", limit:");
             r = strchr(argv[i], '=') + 1;
             strcat(args, r);
@@ -68,7 +68,7 @@ void make_examples(char **argv, char *query) {
         } else if (strstr(argv[i], "-uc") != NULL) {
             strcat(args, ", useCanonical: true");
         } else if (strstr(argv[i], "-s") != NULL) {
-            char * r;
+            char *r;
             strcat(args, ", skip:");
             r = strchr(argv[i], '=') + 1;
             strcat(args, r);
@@ -96,7 +96,7 @@ void make_hyphenations(char **argv, char *query) {
     int i = 1;
     while (argv[i] != NULL) {
         if (strstr(argv[i], "-l") != NULL) {
-            char * r;
+            char *r;
             strcat(args, ", limit:");
             r = strchr(argv[i], '=') + 1;
             strcat(args, r);
@@ -132,7 +132,7 @@ void make_pronunciation(char **argv, char *query) {
     int i = 1;
     while (argv[i] != NULL) {
         if (strstr(argv[i], "-l") != NULL) {
-            char * r;
+            char *r;
             strcat(args, ", limit:");
             r = strchr(argv[i], '=') + 1;
             strcat(args, r);
@@ -173,14 +173,14 @@ void make_phrases(char **argv, char *query) {
     int i = 1;
     while (argv[i] != NULL) {
         if (strstr(argv[i], "-l") != NULL) {
-            char * r;
+            char *r;
             strcat(args, ", limit:");
             r = strchr(argv[i], '=') + 1;
             strcat(args, r);
         } else if (strstr(argv[i], "-uc") != NULL) {
             strcat(args, ", useCanonical: true");
         } else if (strstr(argv[i], "-wlmi") != NULL) {
-            char * r;
+            char *r;
             strcat(args, ", wlmi:");
             r = strchr(argv[i], '=') + 1;
             strcat(args, r);
@@ -208,14 +208,14 @@ void make_relations(char **argv, char *query) {
     int i = 1;
     while (argv[i] != NULL) {
         if (strstr(argv[i], "-lrt") != NULL) {
-            char * r;
+            char *r;
             strcat(args, ", limitPerRelationshipType:");
             r = strchr(argv[i], '=') + 1;
             strcat(args, r);
         } else if (strstr(argv[i], "-uc") != NULL) {
             strcat(args, ", useCanonical: true");
         } else if (strstr(argv[i], "-rt") != NULL) {
-            char * r;
+            char *r;
             strcat(args, ", relationshipTypes:");
             r = strchr(argv[i], '=') + 1;
             strcat(args, r);
@@ -232,7 +232,8 @@ void make_relations(char **argv, char *query) {
 
 void make_wod(char *query) {
     strcat(query, "wordOfTheDay ");
-    strcat(query, "{ word publishDate} ");
+    strcat(query,
+           "query { wordOfTheDay { definitions { partOfSpeech  text } examples { text }  }} ");
 }
 
 void make_process(char **argv, char *query) {
