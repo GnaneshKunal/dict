@@ -1,7 +1,7 @@
 #include "dict.h"
 #include <json-c/json.h>
 
-char *rem_array(char *word) {
+void rem_array(char *word) {
     char o = '"';
     char *k, *m, *n;
     k = strchr(word, o);
@@ -15,8 +15,6 @@ char *rem_array(char *word) {
     strncpy(word, m, strlen(m) - strlen(n));
     word[strlen(m) - strlen(n) + 1] = '\0';
     strcpy(word, word);
-
-    return word;
 }
 
 void parse_word(char *data, char *word) {
@@ -51,7 +49,7 @@ void parse_word(char *data, char *word) {
     puts(out);
 }
 
-int parse_examples(char *data, char *word) {
+void parse_examples(char *data, char *word) {
     struct json_object *obj;
     obj = json_tokener_parse(data);
     char out[4096];
@@ -81,7 +79,6 @@ int parse_examples(char *data, char *word) {
         }
     }
     puts(out);
-    return 0;
 }
 
 void parse_related(char *data, char *word) {
