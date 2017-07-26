@@ -46,8 +46,7 @@ void make_word(char **argv) {
     }
     strcat(args, ")");
     strcat(query, args);
-    strcat(query, "{ partOfSpeech text sequence } ");
-    strcat(query, "}");
+    strcat(query, "{ partOfSpeech text sequence }} ");
     request(query, response);
     parse_word(response, argv[2]);
 }
@@ -131,8 +130,7 @@ void make_hyphenations(char **argv) {
     }
     strcat(args, ")");
     strcat(query, args);
-    strcat(query, "{ text type seq } ");
-    strcat(query, "}");
+    strcat(query, "{ text type seq } }");
     request(query, response);
     parse_hyphenation(response, argv[2]);
 }
@@ -179,8 +177,7 @@ void make_pronunciation(char **argv) {
     }
     strcat(args, ")");
     strcat(query, args);
-    strcat(query, "{ rawType pronunciation } ");
-    strcat(query, "}");
+    strcat(query, "{ rawType pronunciation }}");
     request(query, response);
     parse_pronunciation(response, argv[2]);
 }
@@ -219,8 +216,7 @@ void make_phrases(char **argv) {
     }
     strcat(args, ")");
     strcat(query, args);
-    strcat(query, "{ gram1 gram2 } ");
-    strcat(query, "}");
+    strcat(query, "{ gram1 gram2 }}");
     request(query, response);
     parse_phrases(response, argv[2]);
 }
@@ -260,8 +256,7 @@ void make_relations(char **argv) {
     }
     strcat(args, ")");
     strcat(query, args);
-    strcat(query, "{ relationshipType words } ");
-    strcat(query, "}");
+    strcat(query, "{ relationshipType words }}");
     request(query, response);
     parse_related(response, argv[2]);
 }
@@ -270,8 +265,7 @@ void make_wod(void) {
     char query[1000];
     char response[2048];
     strcpy(query, "query {");
-    strcat(query, "wordOfTheDay { word publishDate }");
-    strcat(query, "}");
+    strcat(query, "wordOfTheDay { word publishDate }}");
     request(query, response);
     parse_wotd(response);
 }
