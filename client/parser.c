@@ -48,7 +48,7 @@ void make_word(char **argv) {
     strcat(query, args);
     strcat(query, "{ partOfSpeech text sequence }} ");
     request(query, response);
-    parse_word(response, argv[2]);
+    parse_word(response, argv[0]);
 }
 
 void make_examples(char **argv) {
@@ -91,7 +91,7 @@ void make_examples(char **argv) {
     strcat(query, "{ text title } ");
     strcat(query, "}");
     request(query, response);
-    parse_examples(response, argv[2]);
+    parse_examples(response, argv[0]);
 }
 
 void make_hyphenations(char **argv) {
@@ -132,7 +132,7 @@ void make_hyphenations(char **argv) {
     strcat(query, args);
     strcat(query, "{ text type seq } }");
     request(query, response);
-    parse_hyphenation(response, argv[2]);
+    parse_hyphenation(response, argv[0]);
 }
 
 void make_pronunciation(char **argv) {
@@ -179,7 +179,7 @@ void make_pronunciation(char **argv) {
     strcat(query, args);
     strcat(query, "{ rawType pronunciation }}");
     request(query, response);
-    parse_pronunciation(response, argv[2]);
+    parse_pronunciation(response, argv[0]);
 }
 void make_phrases(char **argv) {
     if (argv[0] == NULL) {
@@ -218,7 +218,7 @@ void make_phrases(char **argv) {
     strcat(query, args);
     strcat(query, "{ gram1 gram2 }}");
     request(query, response);
-    parse_phrases(response, argv[2]);
+    parse_phrases(response, argv[0]);
 }
 
 void make_relations(char **argv) {
@@ -258,7 +258,7 @@ void make_relations(char **argv) {
     strcat(query, args);
     strcat(query, "{ relationshipType words }}");
     request(query, response);
-    parse_related(response, argv[2]);
+    parse_related(response, argv[0]);
 }
 
 void make_wod(void) {
