@@ -1,7 +1,7 @@
 #include "dict.h"
 
 int main(int argc, char **argv) {
-    char *query = malloc(1000 * sizeof(char));
+
     if (argc < 2) {
         print_usage();
         exit(0);
@@ -12,6 +12,6 @@ int main(int argc, char **argv) {
         print_usage();
         exit(1);
     }
-    make_process(argv, query);
+    make_process(argv);
     exit(0);
 }
