@@ -1,6 +1,6 @@
 # DICT
 
-[Dict GraphQL Server](http://dict-cli.kerokuapp.com)
+[Dict GraphQL Server](http://dict-cli.herokuapp.com)
 
 Server is written in JavaScript integrating GraphQL.
 
