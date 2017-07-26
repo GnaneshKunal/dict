@@ -25,7 +25,6 @@ void parse_word(char *data, char *word) {
     strcat(out, word);
     strcat(out, "\n");
     json_object_object_foreach(obj, key, val) {
-        struct json_object *data = val;
         json_object_object_foreach(val, def, val2) {
             struct json_object *arr;
             int i, len = json_object_array_length(val2);
@@ -58,7 +57,6 @@ void parse_examples(char *data, char *word) {
     strcat(out, word);
     strcat(out, "\n");
     json_object_object_foreach(obj, key, val) {
-        struct json_object *data = val;
         json_object_object_foreach(val, def, val2) {
             struct json_object *arr;
             int i, len = json_object_array_length(val2);
@@ -91,7 +89,6 @@ void parse_related(char *data, char *word) {
     strcat(out, word);
     strcat(out, "\n");
     json_object_object_foreach(obj, key, val) {
-        struct json_object *data = val;
         json_object_object_foreach(val, def, val2) {
             struct json_object *arr;
             int i, len = json_object_array_length(val2);
@@ -126,7 +123,6 @@ void parse_pronunciation(char *data, char *word) {
     strcat(out, word);
     strcat(out, "\n");
     json_object_object_foreach(obj, key, val) {
-        struct json_object *data = val;
         json_object_object_foreach(val, def, val2) {
             struct json_object *arr;
             int i, len = json_object_array_length(val2);
@@ -158,7 +154,6 @@ void parse_hyphenation(char *data, char *word) {
     strcat(out, word);
     strcat(out, "\n");
     json_object_object_foreach(obj, key, val) {
-        struct json_object *data = val;
         json_object_object_foreach(val, def, val2) {
             struct json_object *arr;
             int i, len = json_object_array_length(val2);
@@ -186,7 +181,6 @@ void parse_phrases(char *data, char *word) {
     strcat(out, word);
     strcat(out, "\n");
     json_object_object_foreach(obj, key, val) {
-        struct json_object *data = val;
         json_object_object_foreach(val, def, val2) {
             struct json_object *arr;
             int i, len = json_object_array_length(val2);
@@ -214,7 +208,6 @@ void parse_wotd(char *data) {
     obj = json_tokener_parse(data);
     char out[4096], word[15], temp[15], query[25], response[200];
     json_object_object_foreach(obj, key, val) {
-        struct json_object *data = val;
         json_object_object_foreach(val, def, val2) {
             json_object_object_foreach(val2, def2, val3) {
                 if (strcmp(def2, "word") == 0) {
