@@ -35,11 +35,12 @@ void parse_word(char *data, char *word) {
                     if (strcmp(def2, "text") == 0) {
                         strcat(out, ANSI_COLOR_YELLOW "def: " ANSI_COLOR_RESET);
                         strcat(out, json_object_get_string(val3));
-                        strcat(out, "\t");
+                        if (i != len - 1)
+                            strcat(out, "\n");
                     } else if (strcmp(def2, "partOfSpeech") == 0) {
                         strcat(out, ANSI_COLOR_BLUE "partOfSpeech: " ANSI_COLOR_RESET);
                         strcat(out, json_object_get_string(val3));
-                        if (i != len - 1)
+                        if (i != len)
                             strcat(out, "\n");
                     }
                 }
@@ -208,13 +209,10 @@ void parse_phrases(char *data, char *word) {
     puts(out);
 }
 
-void parse_wotd(char *data, char *word) {
+void parse_wotd(char *data) {
     struct json_object *obj;
     obj = json_tokener_parse(data);
-    char out[4096];
-    strcpy(out, ANSI_COLOR_GREEN "Word: " ANSI_COLOR_RESET);
-    strcat(out, word);
-    strcat(out, "\n");
+    char out[4096], word[15], temp[15], query[25], response[200];
     json_object_object_foreach(obj, key, val) {
         struct json_object *data = val;
         json_object_object_foreach(val, def, val2) {
@@ -222,6 +220,8 @@ void parse_wotd(char *data, char *word) {
                 if (strcmp(def2, "word") == 0) {
                     strcat(out, ANSI_COLOR_YELLOW "Word of the day: " ANSI_COLOR_RESET);
                     strcat(out, json_object_get_string(val3));
+                    strcpy(word, json_object_get_string(val3));
+                    word[strlen(word)] = '\0';
                     strcat(out, "\n");
                 } else if (strcmp(def2, "publishDate") == 0) {
                     strcat(out, ANSI_COLOR_BLUE "Date: " ANSI_COLOR_RESET);
@@ -230,5 +230,10 @@ void parse_wotd(char *data, char *word) {
             }
         }
     }
+    strcat(query, "{ definitions(word: \"");
+    strcat(query, word);
+    strcat(query, "\", limit: 2){ text }}");
     puts(out);
+    request(query, response);
+    parse_word(response, word);
 }
