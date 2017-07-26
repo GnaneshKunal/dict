@@ -231,8 +231,7 @@ void make_relations(char **argv, char *query) {
 }
 
 void make_wod(char *query) {
-    strcat(query, "wordOfTheDay ");
-    strcat(query, "query {  wordOfTheDay { word publishDate }}");
+    strcat(query, "wordOfTheDay { word publishDate }");
 }
 
 void make_process(char **argv, char *query) {
@@ -243,43 +242,43 @@ void make_process(char **argv, char *query) {
             make_word(argv + 2, query);
             strcat(query, "}");
             request(query, response);
-            puts(response);
+            parse_word(response, argv[2]);
             break;
         case 'e':
             make_examples(argv + 2, query);
             strcat(query, "}");
             request(query, response);
-            puts(response);
+            parse_examples(response, argv[2]);
             break;
         case 'h':
             make_hyphenations(argv + 2, query);
             strcat(query, "}");
             request(query, response);
-            puts(response);
+            parse_hyphenation(response, argv[2]);
             break;
         case 'o':
             make_pronunciation(argv + 2, query);
             strcat(query, "}");
             request(query, response);
-            puts(response);
+            parse_pronunciation(response, argv[2]);
             break;
         case 'p':
             make_phrases(argv + 2, query);
             strcat(query, "}");
             request(query, response);
-            puts(response);
+            parse_phrases(response, argv[2]);
             break;
         case 'r':
             make_relations(argv + 2, query);
             strcat(query, "}");
             request(query, response);
-            puts(response);
+            parse_related(response, argv[2]);
             break;
         case 'x':
             make_wod(query);
             strcat(query, "}");
             request(query, response);
-            puts(response);
+            parse_wotd(response);
             break;
     }
 }
