@@ -36,6 +36,12 @@ Other options:
         -rt={s} : Relationship Types
 ```
 
+## Removing
+
+```
+$ make clean
+```
+
 ## Contributing
 
 Contributions to this project are always welcome and highly encouraged.
