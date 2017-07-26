@@ -7,7 +7,6 @@ void writefunc(void *ptr, size_t size, size_t nmemb, char *response) {
 
 int request(char *query, char *response) {
     CURL *curl;
-    CURLcode res;
     curl = curl_easy_init();
     if (curl) {
         curl_easy_setopt(curl, CURLOPT_URL, "http://dict-cli.herokuapp.com/graphql");
@@ -17,7 +16,7 @@ int request(char *query, char *response) {
         curl_easy_setopt(curl, CURLOPT_POSTFIELDS, query);
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writefunc);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, response);
-        res = curl_easy_perform(curl);
+        curl_easy_perform(curl);
         curl_easy_cleanup(curl);
     } else
         return false;
