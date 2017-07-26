@@ -26,7 +26,6 @@ void make_phrases(char **);
 void make_relations(char **);
 void make_wod(void);
 
-void rem_array(char *);
 void parse_word(char *, char *);
 void parse_examples(char *, char *);
 void parse_related(char *, char *);
