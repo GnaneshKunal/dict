@@ -33,4 +33,4 @@ void parse_related(char *, char *);
 void parse_pronunciation(char *, char *);
 void parse_hyphenation(char *, char *);
 void parse_phrases(char *, char *);
-void parse_wotd(char *, char *);
+void parse_wotd(char *);
