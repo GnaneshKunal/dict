@@ -1,6 +1,9 @@
 #include "dict.h"
 
-void make_word(char **argv, char *query) {
+void make_word(char **argv) {
+    char query[1000];
+    char response[2048];
+    strcpy(query, "query{ ");
     char args[100];
     if (argv[0] == NULL) {
         print_usage();
@@ -44,14 +47,20 @@ void make_word(char **argv, char *query) {
     strcat(args, ")");
     strcat(query, args);
     strcat(query, "{ partOfSpeech text sequence } ");
+    strcat(query, "}");
+    request(query, response);
+    parse_word(response, argv[2]);
 }
 
-void make_examples(char **argv, char *query) {
+void make_examples(char **argv) {
     if (argv[0] == NULL) {
         print_usage();
         exit(0);
     }
     char args[100];
+    char query[1000];
+    char response[2048];
+    strcpy(query, "query{ ");
     strcat(query, "examples ");
     strcpy(args, "( word:\"");
     strcat(args, argv[0]);
@@ -81,14 +90,20 @@ void make_examples(char **argv, char *query) {
     strcat(args, ")");
     strcat(query, args);
     strcat(query, "{ text title } ");
+    strcat(query, "}");
+    request(query, response);
+    parse_examples(response, argv[2]);
 }
 
-void make_hyphenations(char **argv, char *query) {
+void make_hyphenations(char **argv) {
     if (argv[0] == NULL) {
         print_usage();
         exit(0);
     }
+    char query[1000];
+    char response[2048];
     char args[100];
+    strcpy(query, "query{ ");
     strcat(query, "hyphenations ");
     strcpy(args, "( word:\"");
     strcat(args, argv[0]);
@@ -117,14 +132,20 @@ void make_hyphenations(char **argv, char *query) {
     strcat(args, ")");
     strcat(query, args);
     strcat(query, "{ text type seq } ");
+    strcat(query, "}");
+    request(query, response);
+    parse_hyphenation(response, argv[2]);
 }
 
-void make_pronunciation(char **argv, char *query) {
+void make_pronunciation(char **argv) {
     if (argv[0] == NULL) {
         print_usage();
         exit(0);
     }
     char args[100];
+    char query[1000];
+    char response[2048];
+    strcpy(query, "query{ ");
     strcat(query, "pronunciations ");
     strcpy(args, "( word:\"");
     strcat(args, argv[0]);
@@ -159,13 +180,19 @@ void make_pronunciation(char **argv, char *query) {
     strcat(args, ")");
     strcat(query, args);
     strcat(query, "{ rawType pronunciation } ");
+    strcat(query, "}");
+    request(query, response);
+    parse_pronunciation(response, argv[2]);
 }
-void make_phrases(char **argv, char *query) {
+void make_phrases(char **argv) {
     if (argv[0] == NULL) {
         print_usage();
         exit(0);
     }
+    char query[1000];
+    char response[2048];
     char args[100];
+    strcpy(query, "query{ ");
     strcat(query, "phrases ");
     strcpy(args, "( word:\"");
     strcat(args, argv[0]);
@@ -193,14 +220,20 @@ void make_phrases(char **argv, char *query) {
     strcat(args, ")");
     strcat(query, args);
     strcat(query, "{ gram1 gram2 } ");
+    strcat(query, "}");
+    request(query, response);
+    parse_phrases(response, argv[2]);
 }
 
-void make_relations(char **argv, char *query) {
+void make_relations(char **argv) {
     if (argv[0] == NULL) {
         print_usage();
         exit(0);
     }
+    char query[1000];
+    char response[2048];
     char args[100];
+    strcpy(query, "query{ ");
     strcat(query, "relatedWords ");
     strcpy(args, "( word:\"");
     strcat(args, argv[0]);
@@ -228,57 +261,43 @@ void make_relations(char **argv, char *query) {
     strcat(args, ")");
     strcat(query, args);
     strcat(query, "{ relationshipType words } ");
+    strcat(query, "}");
+    request(query, response);
+    parse_related(response, argv[2]);
 }
 
-void make_wod(char *query) {
-    strcat(query, "wordOfTheDay { word publishDate }");
-}
-
-void make_process(char **argv, char *query) {
-    strcpy(query, "query{ ");
+void make_wod(void) {
+    char query[1000];
     char response[2048];
+    strcpy(query, "query {");
+    strcat(query, "wordOfTheDay { word publishDate }");
+    strcat(query, "}");
+    request(query, response);
+    parse_wotd(response);
+}
+
+void make_process(char **argv) {
     switch (argv[1][1]) {
         case 'd':
-            make_word(argv + 2, query);
-            strcat(query, "}");
-            request(query, response);
-            parse_word(response, argv[2]);
+            make_word(argv + 2);
             break;
         case 'e':
-            make_examples(argv + 2, query);
-            strcat(query, "}");
-            request(query, response);
-            parse_examples(response, argv[2]);
+            make_examples(argv + 2);
             break;
         case 'h':
-            make_hyphenations(argv + 2, query);
-            strcat(query, "}");
-            request(query, response);
-            parse_hyphenation(response, argv[2]);
+            make_hyphenations(argv + 2);
             break;
         case 'o':
-            make_pronunciation(argv + 2, query);
-            strcat(query, "}");
-            request(query, response);
-            parse_pronunciation(response, argv[2]);
+            make_pronunciation(argv + 2);
             break;
         case 'p':
-            make_phrases(argv + 2, query);
-            strcat(query, "}");
-            request(query, response);
-            parse_phrases(response, argv[2]);
+            make_phrases(argv + 2);
             break;
         case 'r':
-            make_relations(argv + 2, query);
-            strcat(query, "}");
-            request(query, response);
-            parse_related(response, argv[2]);
+            make_relations(argv + 2);
             break;
         case 'x':
-            make_wod(query);
-            strcat(query, "}");
-            request(query, response);
-            parse_wotd(response);
+            make_wod();
             break;
     }
 }
