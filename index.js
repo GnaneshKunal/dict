@@ -15,7 +15,12 @@ app.use('/graphql', expressGraphQL({
 }));
 
 app.get('/', (req, res) => {
-    return res.send('Hello, World');
+    return res.send({
+        Name: 'Dict',
+        Author: 'Gnanesh Kunal',
+        url: 'http://dict-cli.herokuapp.com/graphql',
+        repositoryURL: 'https://github.com/GnaneshKunal/dict'
+    });
 });
 
 server.listen(PORT, (err) => {
